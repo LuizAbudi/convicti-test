@@ -49,6 +49,7 @@ export function useEvaluations() {
   onMounted(fetchEvaluations);
 
   return {
+    evaluations,
     loading,
     error,
     averageEvaluation,
