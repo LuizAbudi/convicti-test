@@ -1,6 +1,9 @@
 <template>
   <div class="bg-white shadow-lg rounded-lg min-h-[140px]">
-    <div class="flex h-full">
+    <div v-if="loading" class="flex h-full items-center justify-center">
+      <LoadingIcon color="#000" :width="26" :height="26" />
+    </div>
+    <div v-else class="flex h-full">
       <div class="mx-6 my-3 w-full flex flex-col justify-between">
         <div class="flex justify-between items-center">
           <div class="text-xl text-(--text-secondary-color) opacity-45">
@@ -33,6 +36,7 @@
 
 
 <script lang="ts">
+import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import AndroidIcon from '@/assets/icons/AndroidIcon.vue';
 import IosIcon from '@/assets/icons/IosIcon.vue';
 import { defineComponent } from 'vue';
@@ -63,11 +67,16 @@ export default defineComponent({
     iconColor: {
       type: String,
       default: '#000000'
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
     AndroidIcon,
-    IosIcon
+    IosIcon,
+    LoadingIcon
   }
 })
 </script>
