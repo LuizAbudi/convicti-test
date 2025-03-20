@@ -5,7 +5,7 @@
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-      <CardItem 
+      <InformationsCard 
         title="Downloads"
         :quantity="totalDownloads.toString()"
         :icon="CloudArrowDownIcon"
@@ -14,7 +14,7 @@
         :iosQuantity="iosDownloads.toString()"
         :androidQuantity="androidDownloads.toString()"
       />
-      <CardItem
+      <InformationsCard
         title="Avaliações"
         :quantity="averageEvaluation.toPrecision(2).toString()"
         :icon="StarCommentIcon"
@@ -23,7 +23,7 @@
         :iosQuantity="iosEvaluations.toString()"
         :androidQuantity="androidEvaluations.toString()"
       />
-      <CardItem 
+      <InformationsCard 
         title="Erros"
         :quantity="totalErrors.toString()"
         :icon="ErrorsIcon"
@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
-import CardItem from '@/components/CardItem.vue';
+import InformationsCard from '@/components/InformationsCard.vue';
 import CloudArrowDownIcon from '@/assets/icons/CloudArrowDownIcon.vue';
 import StarCommentIcon from '@/assets/icons/StarCommentIcon.vue';
 import ErrorsIcon from '@/assets/icons/ErrorsIcon.vue';
