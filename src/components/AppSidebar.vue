@@ -54,10 +54,6 @@
         </ul>
       </div>
     </div>
-
-    <div class="flex-1 p-6">
-      <slot></slot>
-    </div>
   </div>
 </template>
 

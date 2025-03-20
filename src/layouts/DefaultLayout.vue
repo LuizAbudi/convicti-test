@@ -2,7 +2,7 @@
   <div class="flex">
     <AppSidebar />
 
-    <div class="flex-1 p-6">
+    <div class="flex-1 bg-gray-300 p-12">
       <slot></slot>
     </div>
   </div>
