@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div>
     <div class="w-[250px] pt-[45px] h-screen text-(--text-dashboard-color) border-r border-gray-400 flex flex-col p-6">
       <div class="flex items-center justify-center mb-8">
         <img src="../assets/logo.svg" alt="Logo" />
