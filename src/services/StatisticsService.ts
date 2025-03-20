@@ -28,6 +28,15 @@ export interface Evaluation {
   platform: "IOS" | "ANDROID";
 }
 
+export interface Feature {
+  id: number;
+  name: string;
+  is_new: number;
+  created_at: string;
+  updated_at: string;
+  total_usage: number;
+}
+
 interface PaginationLink {
   url: string | null;
   label: string;
@@ -77,6 +86,19 @@ class StatisticsService {
     const response = await this.httpService.get<ApiResponse<Error>>(
       page ? `/api/v1/errors?page=${page}` : "/api/v1/errors"
     );
+
+    return response;
+  }
+
+  async getFeatures(page?: number, is_new?: number): Promise<ApiResponse<Feature>> {
+    const baseUrl = "/api/v1/features";
+    const queryParams = [
+      is_new !== undefined && `is_new=${is_new}`,
+      page !== undefined && `page=${page}`
+    ].filter(Boolean);
+
+    const url = queryParams.length > 0 ? `${baseUrl}?${queryParams.join('&')}` : baseUrl;
+    const response = await this.httpService.get<ApiResponse<Feature>>(url);
 
     return response;
   }

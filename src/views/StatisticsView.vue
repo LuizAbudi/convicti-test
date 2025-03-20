@@ -41,9 +41,16 @@
       />
     </div>
 
+    <div class="flex flex-col gap-4 mt-6">
+      <NewFeaturesCard
+        :features="features"
+        :loading="loadingFeatures"
+      />
+    </div>
+
     <div 
       id="toast-danger"
-      v-if="errorDownloads || errorEvaluations || errorErrors" 
+      v-if="errorDownloads || errorEvaluations || errorErrors || errorFeatures" 
       class="fixed flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm top-5 right-5"
       role="alert"
     >
@@ -53,7 +60,7 @@
           </svg>
       </div>
       <div class="ms-3 text-sm font-normal">
-          {{ errorErrors || errorDownloads || errorEvaluations }}
+          {{ errorErrors || errorDownloads || errorEvaluations || errorFeatures }}
       </div>
       <div 
         type="button"
@@ -79,6 +86,8 @@ import { useErrors } from '@/composables/useErrors';
 import { useDownloads } from '@/composables/useDownloads';
 import { useEvaluations } from '@/composables/useEvaluations';
 import FeedbacksCard from '@/components/FeedbacksCard.vue';
+import { useFeatures } from '@/composables/useFeatures';
+import NewFeaturesCard from '@/components/NewFeaturesCard.vue';
 
 const {
     loading: loadingErrors,
@@ -104,6 +113,12 @@ const {
     iosEvaluations,
     androidEvaluations,
   } = useEvaluations();
+
+  const {
+    features,
+    loading: loadingFeatures,
+    error: errorFeatures,
+  } = useFeatures();
 
   function removeToast() {
     const toast = document.getElementById('toast-danger');

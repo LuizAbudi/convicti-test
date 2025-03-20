@@ -19,7 +19,7 @@
             {{ quantity }}
           </div>
         </div>
-        <div class="flex items-center text-base gap-4 ">
+        <div class="flex items-center text-base gap-6">
           <span class="flex items-center gap-1">
             <AndroidIcon :width="16" :height="16" />
             <span>{{ androidQuantity }}</span>
@@ -27,6 +27,10 @@
           <span class="flex items-center gap-1">
             <IosIcon :width="16" :height="16" />
             <span>{{ iosQuantity }}</span>
+          </span>
+
+          <span v-if="title === 'Erros'" class="flex justify-end text-[#00EC6D] w-full items-center">
+            -5%<CgArrowLongDown class="w-4 h-4" />
           </span>
         </div>
       </div>
@@ -40,6 +44,7 @@ import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import AndroidIcon from '@/assets/icons/AndroidIcon.vue';
 import IosIcon from '@/assets/icons/IosIcon.vue';
 import { defineComponent } from 'vue';
+import { CgArrowLongDown } from 'vue-icons-plus/cg';
 
 
 export default defineComponent({
@@ -76,7 +81,8 @@ export default defineComponent({
   components: {
     AndroidIcon,
     IosIcon,
-    LoadingIcon
+    LoadingIcon,
+    CgArrowLongDown
   }
 })
 </script>
