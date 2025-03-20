@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { defineProps} from 'vue';
 
-defineProps<{ 
-  color: string;
-  width: number;
-  height: number;
-}>(); 
+defineProps({
+  color: {
+    type: String,
+    default: '#303030'
+  },
+  width: {
+    type: Number,
+    default: 26
+  },
+  height: {
+    type: Number,
+    default: 26
+  }
+});
 
 </script>
 
