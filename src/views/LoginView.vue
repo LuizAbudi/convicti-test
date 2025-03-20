@@ -62,7 +62,7 @@ const handleLogin = async () => {
         />
         <button 
           type="submit" 
-          class="w-80 h-12 p-4 bg-primary text-white font-semibold rounded-lg flex items-center justify-center transition-opacity duration-200 ease-in-out disabled:opacity-50"
+          class="w-80 h-12 p-4 bg-(--primary-color) text-white font-semibold rounded-lg flex items-center justify-center transition-opacity duration-200 ease-in-out disabled:opacity-50"
           :disabled="isLoading"
           :class="{'pointer-events-none': isLoading}"
         >        
