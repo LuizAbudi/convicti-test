@@ -20,19 +20,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  color: {
-    type: String,
-    default: '#000000'
-  },
-  width: {
-    type: Number,
-    default: 24
-  },
-  height: {
-    type: Number,
-    default: 24
-  }
-});
+import { defineProps} from 'vue';
+
+defineProps<{ 
+  color: string;
+  width: number;
+  height: number;
+}>(); 
+
 </script>
 
