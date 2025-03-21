@@ -1,12 +1,11 @@
 import { HttpService } from "@/services/HttpService";
-import { useUserStore } from '@/stores/user';
 
 interface PermissionPivot {
   profile_id: number;
   permission_id: number;
 }
 
-interface Permission {
+export interface Permission {
   id: number;
   name: string;
   created_at: string;
@@ -69,10 +68,9 @@ class UserService {
     return response;
   }
 
-  async getLoggedUser(): Promise<void> {
+  async getLoggedUser(): Promise<User> {
     const response = await this.httpService.get<GetLoggedUserResponse>("/api/v1/me");
-    const userStore = useUserStore();
-    userStore.setUser(response.data.user);
+    return response.data.user;
   }
 }
 

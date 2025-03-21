@@ -54,6 +54,11 @@ import { ref } from "vue";
 import { loginService } from "@/services/LoginService";
 import { useRouter } from "vue-router";
 import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
+import { useUserStore } from "@/stores/user";
+import { useUsers } from "@/composables/useUsers";
+
+const { setUser } = useUserStore();
+const { loggedUser, fetchLoggedUser } = useUsers();
 
 const username = ref("");
 const password = ref("");
@@ -71,6 +76,8 @@ const handleLogin = async () => {
     });
 
     localStorage.setItem("token", response.access_token);
+    await fetchLoggedUser();
+    setUser(loggedUser.value!);  
     router.push("/");
   } catch (error) {
     console.error(error);
