@@ -27,10 +27,16 @@
         </div>
       </div>
     </div>
+    <div v-if="loading" class="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xs bg-opacity-50">
+      <LoadingIcon class="w-10 h-10 text-primary-color animate-spin"/>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
+import { profileService } from '@/services/ProfileService';
+import { useReloadComponent } from '@/stores/reloadComponent';
 import { defineProps, defineEmits, ref } from 'vue';
 
 defineProps<{ 
@@ -40,22 +46,39 @@ defineProps<{
 const emit = defineEmits(['close', 'add']);
 
 const name = ref('');
-const options = ref([
-  { label: 'Downloads', value: false },
-  { label: 'Avaliações', value: false },
-  { label: 'Erros', value: false },
-  { label: 'Feedbacks', value: false },
-  { label: 'Novas Funcionalidades', value: false },
+const options = ref<{ label: string; value: boolean; id: number }[]>([
+  { label: 'Downloads', value: false, id: 1 },
+  { label: 'Avaliações', value: false, id: 2 },
+  { label: 'Erros', value: false, id: 3 },
+  { label: 'Feedbacks', value: false, id: 4 },
+  { label: 'Novas Funcionalidades', value: false, id: 5 },
 ]);
+
+const updateStore = useReloadComponent();
 
 const closeModal = () => {
   emit('close');
   name.value = '';
   options.value = options.value.map((option) => ({ ...option, value: false }));
+  updateStore.setShouldUpdate(true);
 };
 
-const addProfile = () => {
-  emit('add', { name: name.value, options: options.value });
-  closeModal();
+const loading = ref(false);
+
+const addProfile = async () => {
+  loading.value = true;
+  try {
+    const addedProfile = await profileService.createProfile({
+      name: name.value,
+      permissions: options.value.filter(opt => opt.value).map(opt => opt.id),
+    });
+    emit('add', addedProfile);
+    closeModal();
+  } catch (err) {
+    console.warn("Erro ao criar o perfil:", err);
+    closeModal();
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

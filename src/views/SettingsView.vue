@@ -5,7 +5,7 @@
     </div>
 
     <div class="flex flex-col gap-4 mt-6">
-      <ProfileCard :profiles="profiles" :loading="loading" />
+      <ProfileCard :key="profileCardKey" :profiles="profiles" :loading="loading" />
     </div>
 
     <div 
@@ -40,12 +40,31 @@
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import ProfileCard from '@/components/ProfileCard.vue';
 import { useProfiles } from '@/composables/useProfile';
+import { useReloadComponent } from '@/stores/reloadComponent';
+import { watch, ref } from 'vue';
 
 const {
   profiles,
   loading,
   error,
 } = useProfiles();
+
+const updateStore = useReloadComponent();
+const { fetchProfiles } = useProfiles();
+
+const profileCardKey = ref(0);
+
+watch(
+  () => updateStore.shouldUpdate,
+  (newValue) => {
+    if (newValue) {
+      profileCardKey.value += 1;
+      updateStore.setShouldUpdate(false);
+      fetchProfiles();
+      console.log('Atualizou');
+    }
+  }
+);
 
 function removeToast() {
   const toast = document.getElementById('toast-danger');

@@ -3,7 +3,7 @@
     <div v-if="loading" class="flex h-[200px] items-center justify-center">
       <LoadingIcon color="#000" :width="26" :height="26" />
     </div>
-    <div v-else class="flex flex-col h-full">
+    <div v-else class="flex flex-col h-full max-h-1/2">
       <div class="flex justify-between items-center px-6 py-3">
         <div class="text-xl">Perfis</div>
         <div @click="openCreateProfileModal">
@@ -62,7 +62,7 @@ import { MdAddBox } from 'vue-icons-plus/md';
 import CreateProfileModal from './CreateProfileModal.vue';
 import type { Profile } from '@/services/ProfileService';
 import EditProfileModal from './EditProfileModal.vue';
-import { useProfiles } from '@/composables/useProfile';
+import { useReloadComponent } from '@/stores/reloadComponent';
 
 defineProps<{ 
   profiles: Profile[]; 
@@ -72,6 +72,7 @@ defineProps<{
 const isCreateProfileModalOpen = ref(false);
 const isEditProfileModalOpen = ref(false);
 const selectedProfile = ref<Profile>();
+const updateStore = useReloadComponent();
 
 const openCreateProfileModal = () => {
   isCreateProfileModalOpen.value = true;
@@ -91,10 +92,8 @@ const handleEditProfile = (profile: Profile) => {
   openEditProfileModal();
 };
 
-const { fetchProfiles } = useProfiles();
-
 const handleCloseEditModal = () => {
   isEditProfileModalOpen.value = false;
-  fetchProfiles();
+  updateStore.setShouldUpdate(true);
 };
 </script>
