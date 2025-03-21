@@ -5,12 +5,16 @@
     </div>
 
     <div class="flex flex-col gap-4 mt-6">
-      <ProfileCard :key="profileCardKey" :profiles="profiles" :loading="loading" />
+      <ProfileCard :key="profileCardKey" :profiles="profiles" :loading="loadingProfiles" />
+    </div>
+
+    <div class="flex flex-col gap-4 mt-6">
+      <UsersCard :key="profileCardKey" :profiles="profiles" :loading="usersLoading" :users="users" />
     </div>
 
     <div 
       id="toast-danger"
-      v-if="error" 
+      v-if="profilesError || usersError" 
       class="fixed flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm top-5 right-5"
       role="alert"
     >
@@ -20,7 +24,7 @@
         </svg>
       </div>
       <div class="ms-3 text-sm font-normal">
-        {{ error }}
+        {{ profilesError || usersError }}
       </div>
       <div 
         type="button"
@@ -42,12 +46,20 @@ import ProfileCard from '@/components/ProfileCard.vue';
 import { useProfiles } from '@/composables/useProfile';
 import { useReloadComponent } from '@/stores/reloadComponent';
 import { watch, ref } from 'vue';
+import UsersCard from '@/components/UsersCard.vue';
+import { useUsers } from '@/composables/useUsers';
 
 const {
   profiles,
-  loading,
-  error,
+  loading: loadingProfiles,
+  error: profilesError,
 } = useProfiles();
+
+const {
+  users,
+  loading: usersLoading,
+  error: usersError,
+} = useUsers();
 
 const updateStore = useReloadComponent();
 const { fetchProfiles } = useProfiles();

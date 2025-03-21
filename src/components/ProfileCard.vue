@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow-lg rounded-lg h-1/2 overflow-auto">
+  <div class="bg-white shadow-lg rounded-lg h-1/2 max-h-[350px] overflow-auto">
     <div v-if="loading" class="flex h-[200px] items-center justify-center">
       <LoadingIcon color="#000" :width="26" :height="26" />
     </div>
@@ -59,9 +59,9 @@ import { ref } from 'vue';
 import EditProfileIcon from '@/assets/icons/EditProfileIcon.vue';
 import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import { MdAddBox } from 'vue-icons-plus/md';
-import CreateProfileModal from './CreateProfileModal.vue';
+import CreateProfileModal from './Modal/CreateProfileModal.vue';
 import type { Profile } from '@/services/ProfileService';
-import EditProfileModal from './EditProfileModal.vue';
+import EditProfileModal from './Modal/EditProfileModal.vue';
 import { useReloadComponent } from '@/stores/reloadComponent';
 
 defineProps<{ 
