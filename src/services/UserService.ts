@@ -1,14 +1,16 @@
 import { HttpService } from "@/services/HttpService";
 
+interface PermissionPivot {
+  profile_id: number;
+  permission_id: number;
+}
+
 interface Permission {
   id: number;
   name: string;
   created_at: string;
   updated_at: string;
-  pivot: {
-    profile_id: number;
-    permission_id: number;
-  };
+  pivot: PermissionPivot;
 }
 
 interface Profile {
@@ -39,14 +41,20 @@ interface CreateUserBody {
 }
 
 interface ApiResponse<T> {
-  data: T[];
+  data: T;
+}
+
+interface GetLoggedUserResponse {
+  data: {
+    user: User;
+  };
 }
 
 class UserService {
   private httpService = HttpService.getInstance();
 
-  async getUsers(): Promise<ApiResponse<User>> {
-    const response = await this.httpService.get<ApiResponse<User>>("/api/v1/users");
+  async getUsers(): Promise<ApiResponse<User[]>> {
+    const response = await this.httpService.get<ApiResponse<User[]>>("/api/v1/users");
     return response;
   }
 
@@ -58,6 +66,11 @@ class UserService {
   async updateUser(id: number, body: CreateUserBody): Promise<User> {
     const response = await this.httpService.put<User>(`/api/v1/users/${id}`, body);
     return response;
+  }
+
+  async getLoggedUser(): Promise<User> {
+    const response = await this.httpService.get<GetLoggedUserResponse>("/api/v1/users/me");
+    return response.data.user;
   }
 }
 

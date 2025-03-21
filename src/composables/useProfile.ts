@@ -1,5 +1,5 @@
 import { profileService, type Profile } from '@/services/ProfileService';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 export function useProfiles() {
   const profiles = ref<Profile[]>([]);
@@ -17,8 +17,6 @@ export function useProfiles() {
       loading.value = false;
     }
   };
-
-  onMounted(fetchProfiles);
 
   return {
     profiles,

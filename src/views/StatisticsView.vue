@@ -3,9 +3,10 @@
     <div>
       <h1 class="text-3xl font-bold">Estatísticas</h1>
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-      <InformationsCard 
+      <InformationsCard
+        v-if="canViewDownloads"
         title="Downloads"
         :quantity="totalDownloads.toString()"
         :icon="CloudArrowDownIcon"
@@ -14,7 +15,9 @@
         :iosQuantity="iosDownloads.toString()"
         :androidQuantity="androidDownloads.toString()"
       />
+
       <InformationsCard
+        v-if="canViewEvaluations"
         title="Avaliações"
         :quantity="averageEvaluation.toPrecision(2).toString()"
         :icon="StarCommentIcon"
@@ -23,7 +26,9 @@
         :iosQuantity="iosEvaluations.toString()"
         :androidQuantity="androidEvaluations.toString()"
       />
-      <InformationsCard 
+
+      <InformationsCard
+        v-if="canViewErrors"
         title="Erros"
         :quantity="totalErrors.toString()"
         :icon="ErrorsIcon"
@@ -34,96 +39,99 @@
       />
     </div>
 
-    <div class="flex flex-col gap-4 mt-6">
+    <div class="flex flex-col gap-4 mt-6" v-if="canViewEvaluations">
       <FeedbacksCard
         :evaluations="evaluations"
         :loading="loadingEvaluations"
       />
     </div>
 
-    <div class="flex flex-col gap-4 mt-6">
+    <div class="flex flex-col gap-4 mt-6" v-if="canViewFeatures">
       <NewFeaturesCard
         :features="features"
         :loading="loadingFeatures"
       />
     </div>
 
-    <div 
-      id="toast-danger"
-      v-if="errorDownloads || errorEvaluations || errorErrors || errorFeatures" 
-      class="fixed flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm top-5 right-5"
-      role="alert"
+    <div
+      v-if="!canViewDownloads && !canViewEvaluations && !canViewErrors && !canViewFeatures"
+      class="mt-10 text-red-500 text-center font-medium"
     >
-      <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg">
-          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
-          </svg>
-      </div>
-      <div class="ms-3 text-sm font-normal">
-          {{ errorErrors || errorDownloads || errorEvaluations || errorFeatures }}
-      </div>
-      <div 
-        type="button"
-        class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" 
-        aria-label="Close"
-        @click="removeToast">
-        <span class="sr-only">Fechar</span>
-        <svg class="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-        </svg>
-      </div>
+      Você não tem permissão para visualizar nenhuma estatística.
     </div>
+    
+    <AppToaster :message="toastMessage.value" :show="showToast" @close="showToast = false" />
   </DefaultLayout>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, computed, watch } from 'vue';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import InformationsCard from '@/components/InformationsCard.vue';
+import FeedbacksCard from '@/components/FeedbacksCard.vue';
+import NewFeaturesCard from '@/components/NewFeaturesCard.vue';
+import AppToaster from '@/components/ui/AppToaster.vue';
+
 import CloudArrowDownIcon from '@/assets/icons/CloudArrowDownIcon.vue';
 import StarCommentIcon from '@/assets/icons/StarCommentIcon.vue';
 import ErrorsIcon from '@/assets/icons/ErrorsIcon.vue';
-import { useErrors } from '@/composables/useErrors';
+
 import { useDownloads } from '@/composables/useDownloads';
 import { useEvaluations } from '@/composables/useEvaluations';
-import FeedbacksCard from '@/components/FeedbacksCard.vue';
+import { useErrors } from '@/composables/useErrors';
 import { useFeatures } from '@/composables/useFeatures';
-import NewFeaturesCard from '@/components/NewFeaturesCard.vue';
+import { useAccessControl } from '@/composables/useAccessControl';
 
 const {
-    loading: loadingErrors,
-    error: errorErrors,
-    totalErrors,
-    iosErrors,
-    androidErrors,
-  } = useErrors();
+  totalDownloads,
+  iosDownloads,
+  androidDownloads,
+  loading: loadingDownloads,
+  error: errorDownloads,
+} = useDownloads();
 
-  const {
-    loading: loadingDownloads,
-    error: errorDownloads,
-    totalDownloads,
-    iosDownloads,
-    androidDownloads,
-  } = useDownloads();
+const {
+  evaluations,
+  averageEvaluation,
+  iosEvaluations,
+  androidEvaluations,
+  loading: loadingEvaluations,
+  error: errorEvaluations,
+} = useEvaluations();
 
-  const {
-    evaluations,
-    loading: loadingEvaluations,
-    error: errorEvaluations,
-    averageEvaluation,
-    iosEvaluations,
-    androidEvaluations,
-  } = useEvaluations();
+const {
+  totalErrors,
+  iosErrors,
+  androidErrors,
+  loading: loadingErrors,
+  error: errorErrors,
+} = useErrors();
 
-  const {
-    features,
-    loading: loadingFeatures,
-    error: errorFeatures,
-  } = useFeatures();
+const {
+  features,
+  loading: loadingFeatures,
+  error: errorFeatures,
+} = useFeatures();
 
-  function removeToast() {
-    const toast = document.getElementById('toast-danger');
-    if (toast) {
-      toast.remove();
-    }
-  }
+const { loadUser, hasPermission } = useAccessControl();
+
+const canViewDownloads = ref(false);
+const canViewEvaluations = ref(false);
+const canViewErrors = ref(false);
+const canViewFeatures = ref(false);
+
+onMounted(async () => {
+  await loadUser();
+  canViewDownloads.value = hasPermission('Downloads');
+  canViewEvaluations.value = hasPermission('Avaliações');
+  canViewErrors.value = hasPermission('Erros');
+  canViewFeatures.value = hasPermission('Novas Funcionalidades');
+});
+
+const showToast = ref(false);
+const toastMessage = computed(() => errorDownloads || errorEvaluations || errorErrors || errorFeatures || '')
+
+watch(toastMessage, (msg) => {
+  showToast.value = !!msg;
+});
 </script>
