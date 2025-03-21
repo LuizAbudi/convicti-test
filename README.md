@@ -45,7 +45,19 @@ npm install
 npm run dev
 ```
 
-Agora, o painel estará disponível em [http://localhost:3000](http://localhost:3000).
+Agora, o painel estará disponível em [http://localhost:5173/](http://localhost:5173/).
+
+## Conexão com a API
+
+Para configurar a conexão com a API, adicione as variáveis de ambiente no arquivo `.env` na raiz do projeto:
+
+```bash
+VITE_API_URL=http://localhost:8080
+VITE_CLIENT_ID=id
+VITE_CLIENT_SECRET=secret
+```
+
+Essas variáveis são usadas para configurar a URL da API e os credenciais do cliente. O valor de `VITE_API_URL` define a URL base da API, enquanto `VITE_CLIENT_ID` e `VITE_CLIENT_SECRET` são utilizados para autenticação, se necessário.
 
 ## Estrutura do Projeto
 
@@ -99,10 +111,6 @@ Durante o desenvolvimento, você pode utilizar os seguintes comandos:
 - **Rodar o servidor de desenvolvimento**: `npm run dev`
 - **Compilar o projeto para produção**: `npm run build`
 - **Verificar o projeto (Linting)**: `npm run lint`
-
-## Contribuições
-
-Contribuições são bem-vindas! Sinta-se à vontade para enviar pull requests com melhorias ou correções de bugs.
 
 ## Licença
 
