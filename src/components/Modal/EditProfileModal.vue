@@ -50,8 +50,8 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { profileService, type Profile } from '@/services/ProfileService';
-import { defineProps, defineEmits } from 'vue';
 import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
+import { useReloadComponent } from '@/stores/reloadComponent';
 
 const props = defineProps<{
   isOpen: boolean;
@@ -87,8 +87,11 @@ watchEffect(() => {
   }
 });
 
+const updateStore = useReloadComponent();
+
 const closeModal = () => {
   emit('close');
+  updateStore.setShouldProfileUpdate(true);
 };
 
 const loading = ref(false);

@@ -37,7 +37,7 @@
 import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import { profileService } from '@/services/ProfileService';
 import { useReloadComponent } from '@/stores/reloadComponent';
-import { defineProps, defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 
 defineProps<{ 
   isOpen: boolean;
@@ -60,7 +60,7 @@ const closeModal = () => {
   emit('close');
   name.value = '';
   options.value = options.value.map((option) => ({ ...option, value: false }));
-  updateStore.setShouldUpdate(true);
+  updateStore.setShouldProfileUpdate(true);
 };
 
 const loading = ref(false);

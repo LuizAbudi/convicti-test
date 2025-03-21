@@ -47,7 +47,7 @@ import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import type { Profile } from '@/services/ProfileService';
 import { userService } from '@/services/UserService';
 import { useReloadComponent } from '@/stores/reloadComponent';
-import { defineProps, defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 
 defineProps<{ 
   isOpen: boolean;
@@ -68,7 +68,7 @@ const closeModal = () => {
   name.value = '';
   email.value = '';
   profile_id.value = null;
-  updateStore.setShouldUpdate(true);
+  updateStore.setShouldCardUpdate(true);
 };
 
 const addUser = async () => {

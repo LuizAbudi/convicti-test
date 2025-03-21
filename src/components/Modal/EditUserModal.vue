@@ -86,11 +86,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, watch } from 'vue';
+import { ref, watch } from 'vue';
 import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
 import type { Profile } from '@/services/ProfileService';
 import type { User } from '@/services/UserService';
 import { userService } from '@/services/UserService';
+import { useReloadComponent } from '@/stores/reloadComponent';
 
 const props = defineProps<{ 
   isOpen: boolean;
@@ -105,9 +106,11 @@ const email = ref('');
 const profile_id = ref<number | null>(null);
 const loading = ref(false);
 const showError = ref(false);
+const updateStore = useReloadComponent();
 
 const closeModal = () => {
   emit('close');
+  updateStore.setShouldCardUpdate(true);
 };
 
 const updateUser = async () => {

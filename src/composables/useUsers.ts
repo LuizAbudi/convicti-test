@@ -1,5 +1,5 @@
 import { userService, type User } from '@/services/UserService';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 export function useUsers() {
   const users = ref<User[]>([]);
@@ -17,8 +17,6 @@ export function useUsers() {
       loading.value = false;
     }
   };
-
-  onMounted(fetchUsers);
 
   return {
     users,

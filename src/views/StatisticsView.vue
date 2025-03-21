@@ -6,7 +6,6 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
       <InformationsCard
-        v-if="canViewDownloads"
         title="Downloads"
         :quantity="totalDownloads.toString()"
         :icon="CloudArrowDownIcon"
@@ -17,7 +16,6 @@
       />
 
       <InformationsCard
-        v-if="canViewEvaluations"
         title="Avaliações"
         :quantity="averageEvaluation.toPrecision(2).toString()"
         :icon="StarCommentIcon"
@@ -28,7 +26,6 @@
       />
 
       <InformationsCard
-        v-if="canViewErrors"
         title="Erros"
         :quantity="totalErrors.toString()"
         :icon="ErrorsIcon"
@@ -39,33 +36,25 @@
       />
     </div>
 
-    <div class="flex flex-col gap-4 mt-6" v-if="canViewEvaluations">
+    <div class="flex flex-col gap-4 mt-6">
       <FeedbacksCard
         :evaluations="evaluations"
         :loading="loadingEvaluations"
       />
     </div>
 
-    <div class="flex flex-col gap-4 mt-6" v-if="canViewFeatures">
+    <div class="flex flex-col gap-4 mt-6">
       <NewFeaturesCard
         :features="features"
         :loading="loadingFeatures"
       />
-    </div>
-
-    <div
-      v-if="!canViewDownloads && !canViewEvaluations && !canViewErrors && !canViewFeatures"
-      class="mt-10 text-red-500 text-center font-medium"
-    >
-      Você não tem permissão para visualizar nenhuma estatística.
-    </div>
-    
+    </div>    
     <AppToaster :message="toastMessage.value" :show="showToast" @close="showToast = false" />
   </DefaultLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import InformationsCard from '@/components/InformationsCard.vue';
 import FeedbacksCard from '@/components/FeedbacksCard.vue';
@@ -80,7 +69,6 @@ import { useDownloads } from '@/composables/useDownloads';
 import { useEvaluations } from '@/composables/useEvaluations';
 import { useErrors } from '@/composables/useErrors';
 import { useFeatures } from '@/composables/useFeatures';
-import { useAccessControl } from '@/composables/useAccessControl';
 
 const {
   totalDownloads,
@@ -88,6 +76,7 @@ const {
   androidDownloads,
   loading: loadingDownloads,
   error: errorDownloads,
+  fetchDownloads,
 } = useDownloads();
 
 const {
@@ -97,6 +86,7 @@ const {
   androidEvaluations,
   loading: loadingEvaluations,
   error: errorEvaluations,
+  fetchEvaluations,
 } = useEvaluations();
 
 const {
@@ -105,31 +95,25 @@ const {
   androidErrors,
   loading: loadingErrors,
   error: errorErrors,
+  fetchErrors,
 } = useErrors();
 
 const {
   features,
   loading: loadingFeatures,
   error: errorFeatures,
+  fetchFeatures,
 } = useFeatures();
-
-const { loadUser, hasPermission } = useAccessControl();
-
-const canViewDownloads = ref(false);
-const canViewEvaluations = ref(false);
-const canViewErrors = ref(false);
-const canViewFeatures = ref(false);
-
-onMounted(async () => {
-  await loadUser();
-  canViewDownloads.value = hasPermission('Downloads');
-  canViewEvaluations.value = hasPermission('Avaliações');
-  canViewErrors.value = hasPermission('Erros');
-  canViewFeatures.value = hasPermission('Novas Funcionalidades');
-});
 
 const showToast = ref(false);
 const toastMessage = computed(() => errorDownloads || errorEvaluations || errorErrors || errorFeatures || '')
+
+onMounted(() => {
+  fetchDownloads();
+  fetchEvaluations();
+  fetchErrors();
+  fetchFeatures();
+});
 
 watch(toastMessage, (msg) => {
   showToast.value = !!msg;

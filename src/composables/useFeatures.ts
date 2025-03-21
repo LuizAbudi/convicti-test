@@ -1,5 +1,5 @@
 import { statisticsService, type Feature } from '@/services/StatisticsService';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 export function useFeatures() {
   const features = ref<Feature[]>([]);
@@ -29,11 +29,10 @@ export function useFeatures() {
     }
   };
 
-  onMounted(fetchFeatures);
-
   return {
     features,
     loading,
     error,
+    fetchFeatures,
   };
 }

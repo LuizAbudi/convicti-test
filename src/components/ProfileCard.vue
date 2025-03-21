@@ -94,6 +94,6 @@ const handleEditProfile = (profile: Profile) => {
 
 const handleCloseEditModal = () => {
   isEditProfileModalOpen.value = false;
-  updateStore.setShouldUpdate(true);
+  updateStore.setShouldCardUpdate(true);
 };
 </script>

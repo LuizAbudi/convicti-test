@@ -2,11 +2,16 @@ import { defineStore } from 'pinia';
 
 export const useReloadComponent = defineStore('reload', {
   state: () => ({
-    shouldUpdate: false,
+    shouldProfileUpdate: false,
+    shouldCardUpdate: false,
   }),
   actions: {
-    setShouldUpdate(value: boolean) {
-      this.shouldUpdate = value;
+    setShouldProfileUpdate(value: boolean) {
+      this.shouldProfileUpdate = value;
+    },
+
+    setShouldCardUpdate(value: boolean) {
+      this.shouldCardUpdate = value;
     },
   },
 });

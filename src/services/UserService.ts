@@ -1,4 +1,5 @@
 import { HttpService } from "@/services/HttpService";
+import { useUserStore } from '@/stores/user';
 
 interface PermissionPivot {
   profile_id: number;
@@ -68,9 +69,10 @@ class UserService {
     return response;
   }
 
-  async getLoggedUser(): Promise<User> {
-    const response = await this.httpService.get<GetLoggedUserResponse>("/api/v1/users/me");
-    return response.data.user;
+  async getLoggedUser(): Promise<void> {
+    const response = await this.httpService.get<GetLoggedUserResponse>("/api/v1/me");
+    const userStore = useUserStore();
+    userStore.setUser(response.data.user);
   }
 }
 

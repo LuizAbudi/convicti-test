@@ -1,35 +1,3 @@
-<script setup lang="ts">
-import { ref } from "vue";
-import { loginService } from "@/services/LoginService";
-import { useRouter } from "vue-router";
-import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
-
-const username = ref("");
-const password = ref("");
-const errorMessage = ref("");
-const isLoading = ref(false);
-const router = useRouter();
-
-const handleLogin = async () => {
-  isLoading.value = true;
-
-  try {
-    const response = await loginService.login({
-      username: username.value,
-      password: password.value,
-    });
-
-    localStorage.setItem("token", response.access_token);
-    router.push("/");
-  } catch (error) {
-    console.error(error);
-    errorMessage.value = "Credenciais inválidas. Tente novamente.";
-  } finally {
-    isLoading.value = false;
-  }
-};
-</script>
-
 <template>
   <main class="h-screen flex flex-row items-center overflow-hidden">
     <div class="flex absolute top-0 left-0 w-full p-8">
@@ -80,6 +48,38 @@ const handleLogin = async () => {
     </div>
   </main>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import { loginService } from "@/services/LoginService";
+import { useRouter } from "vue-router";
+import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
+
+const username = ref("");
+const password = ref("");
+const errorMessage = ref("");
+const isLoading = ref(false);
+const router = useRouter();
+
+const handleLogin = async () => {
+  isLoading.value = true;
+
+  try {
+    const response = await loginService.login({
+      username: username.value,
+      password: password.value,
+    });
+
+    localStorage.setItem("token", response.access_token);
+    router.push("/");
+  } catch (error) {
+    console.error(error);
+    errorMessage.value = "Credenciais inválidas. Tente novamente.";
+  } finally {
+    isLoading.value = false;
+  }
+};
+</script>
 
 <style scoped>
 .text-primary {

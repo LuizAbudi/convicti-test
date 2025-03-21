@@ -5,7 +5,7 @@
     </div>
     <div v-else class="flex flex-col h-full max-h-1/2">
       <div class="flex justify-between items-center px-6 py-3">
-        <div class="text-xl">Perfis</div>
+        <div class="text-xl">Usuários</div>
         <div @click="openCreateUserModal">
           <MdAddBox class="text-(--primary-color) w-8 h-8 cursor-pointer hover:text-[#5B59FF33]" />
         </div>
@@ -99,6 +99,6 @@ const handleEditUser = (user: User) => {
 
 const handleCloseEditModal = () => {
   isEditUserModalOpen.value = false;
-  updateStore.setShouldUpdate(true);
+  updateStore.setShouldCardUpdate(true);
 };
 </script>

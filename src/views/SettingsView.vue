@@ -1,12 +1,12 @@
 <template>
   <DefaultLayout>
-    <div v-if="canViewSettings">
+    <div>
       <h1 class="text-3xl font-bold">Configurações</h1>
       <div class="flex flex-col gap-4 mt-6">
         <ProfileCard :key="profileCardKey" :profiles="profiles" :loading="loadingProfiles" />
       </div>
       <div class="flex flex-col gap-4 mt-6">
-        <UsersCard :key="profileCardKey" :profiles="profiles" :loading="usersLoading" :users="users" />
+        <UsersCard :key="userCardKey" :profiles="profiles" :loading="usersLoading" :users="users" />
       </div>
       <div 
         id="toast-danger"
@@ -35,10 +35,6 @@
         </div>
       </div>
     </div>
-
-    <div v-else class="p-6 text-red-500 font-medium">
-      Você não tem permissão para acessar esta página.
-    </div>
   </DefaultLayout>
 </template>
 
@@ -50,7 +46,6 @@ import { useProfiles } from '@/composables/useProfile';
 import { useUsers } from '@/composables/useUsers';
 import { useReloadComponent } from '@/stores/reloadComponent';
 import { watch, ref, onMounted } from 'vue';
-import { useAccessControl } from '@/composables/useAccessControl';
 
 const {
   profiles,
@@ -63,27 +58,31 @@ const {
   users,
   loading: usersLoading,
   error: usersError,
+  fetchUsers
 } = useUsers();
 
 const updateStore = useReloadComponent();
 const profileCardKey = ref(0);
+const userCardKey = ref(0);
 
-const { loadUser, hasPermission } = useAccessControl();
-const canViewSettings = ref(false);
-
-onMounted(async () => {
-  await loadUser();
-  canViewSettings.value = hasPermission('Visualiza tudo');
+onMounted(() => {
+  fetchProfiles();
+  fetchUsers();
 });
 
-watch(
-  () => updateStore.shouldUpdate,
-  (newValue) => {
+watch(() => updateStore.shouldProfileUpdate, (newValue) => {
+  if (newValue) {
+    profileCardKey.value += 1;
+    updateStore.setShouldProfileUpdate(false);
+    fetchProfiles();
+  }
+});
+
+watch(() => updateStore.shouldCardUpdate, (newValue) => {
     if (newValue) {
-      profileCardKey.value += 1;
-      updateStore.setShouldUpdate(false);
-      fetchProfiles();
-      console.log('Atualizou');
+      userCardKey.value += 1;
+      updateStore.setShouldCardUpdate(false);
+      fetchUsers();
     }
   }
 );
