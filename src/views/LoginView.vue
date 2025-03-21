@@ -1,35 +1,3 @@
-<script setup lang="ts">
-import { ref } from "vue";
-import { loginService } from "@/services/LoginService";
-import { useRouter } from "vue-router";
-import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
-
-const username = ref("");
-const password = ref("");
-const errorMessage = ref("");
-const isLoading = ref(false);
-const router = useRouter();
-
-const handleLogin = async () => {
-  isLoading.value = true;
-
-  try {
-    const response = await loginService.login({
-      username: username.value,
-      password: password.value,
-    });
-
-    localStorage.setItem("token", response.access_token);
-    router.push("/");
-  } catch (error) {
-    console.error(error);
-    errorMessage.value = "Credenciais inválidas. Tente novamente.";
-  } finally {
-    isLoading.value = false;
-  }
-};
-</script>
-
 <template>
   <main class="h-screen flex flex-row items-center overflow-hidden">
     <div class="flex absolute top-0 left-0 w-full p-8">
@@ -62,7 +30,7 @@ const handleLogin = async () => {
         />
         <button 
           type="submit" 
-          class="w-80 h-12 p-4 bg-primary text-white font-semibold rounded-lg flex items-center justify-center transition-opacity duration-200 ease-in-out disabled:opacity-50"
+          class="w-80 h-12 p-4 bg-(--primary-color) text-white font-semibold rounded-lg flex items-center justify-center transition-opacity duration-200 ease-in-out disabled:opacity-50"
           :disabled="isLoading"
           :class="{'pointer-events-none': isLoading}"
         >        
@@ -80,6 +48,45 @@ const handleLogin = async () => {
     </div>
   </main>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import { loginService } from "@/services/LoginService";
+import { useRouter } from "vue-router";
+import LoadingIcon from '@/assets/icons/LoadingIcon.vue';
+import { useUserStore } from "@/stores/user";
+import { useUsers } from "@/composables/useUsers";
+
+const { setUser } = useUserStore();
+const { loggedUser, fetchLoggedUser } = useUsers();
+
+const username = ref("");
+const password = ref("");
+const errorMessage = ref("");
+const isLoading = ref(false);
+const router = useRouter();
+
+const handleLogin = async () => {
+  isLoading.value = true;
+
+  try {
+    const response = await loginService.login({
+      username: username.value,
+      password: password.value,
+    });
+
+    localStorage.setItem("token", response.access_token);
+    await fetchLoggedUser();
+    setUser(loggedUser.value!);  
+    router.push("/");
+  } catch (error) {
+    console.error(error);
+    errorMessage.value = "Credenciais inválidas. Tente novamente.";
+  } finally {
+    isLoading.value = false;
+  }
+};
+</script>
 
 <style scoped>
 .text-primary {

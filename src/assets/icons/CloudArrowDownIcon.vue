@@ -20,19 +20,22 @@
 </template>
 
 <script setup lang="ts">
+
+
 defineProps({
-  color: {
-    type: String,
-    default: '#000000'
-  },
-  width: {
-    type: Number,
-    default: 24
-  },
-  height: {
-    type: Number,
-    default: 24
-  }
-});
+   color: {
+     type: String,
+     default: '#000000'
+   },
+   width: {
+     type: Number,
+     default: 24
+   },
+   height: {
+     type: Number,
+     default: 24
+   }
+ });
+
 </script>
 

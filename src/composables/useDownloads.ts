@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { statisticsService } from "@/services/StatisticsService";
 import type { Download } from "@/services/StatisticsService";
 
@@ -39,13 +39,12 @@ export function useDownloads() {
     androidDownloads.value = downloads.value.filter(download => download.platform === "ANDROID").length;
   };
 
-  onMounted(fetchDownloads);
-
   return {
     loading,
     error,
     totalDownloads,
     iosDownloads,
     androidDownloads,
+    fetchDownloads,
   };
 }

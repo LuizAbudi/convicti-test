@@ -1,18 +1,20 @@
 <script setup lang="ts">
-defineProps({
-  color: {
-    type: String,
-    default: '#303030'
-  },
-  width: {
-    type: Number,
-    default: 26
-  },
-  height: {
-    type: Number,
-    default: 26
-  }
-});
+
+
+ defineProps({
+   color: {
+     type: String,
+     default: '#303030'
+   },
+   width: {
+     type: Number,
+     default: 26
+   },
+   height: {
+     type: Number,
+     default: 26
+   }
+ });
 </script>
 
 <template>

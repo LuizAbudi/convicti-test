@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { statisticsService } from "@/services/StatisticsService";
 import type { Error } from "@/services/StatisticsService";
 
@@ -39,13 +39,12 @@ export function useErrors() {
     androidErrors.value = errors.value.filter(error => error.platform === "ANDROID").length;
   };
 
-  onMounted(fetchErrors);
-
   return {
     loading,
     error,
     totalErrors,
     iosErrors,
     androidErrors,
+    fetchErrors,
   };
 }

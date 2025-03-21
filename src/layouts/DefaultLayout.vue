@@ -8,15 +8,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue';
 
-export default {
-  name: 'DefaultLayout',
-  components: {
-    AppSidebar,
-  },
-};
 </script>
 
 <style scoped>

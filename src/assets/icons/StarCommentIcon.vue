@@ -20,6 +20,8 @@
 </template>
 
 <script setup lang="ts">
+
+
 defineProps({
   color: {
     type: String,
@@ -34,4 +36,5 @@ defineProps({
     default: 26
   }
 });
+
 </script>

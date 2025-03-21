@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { statisticsService } from "@/services/StatisticsService";
 import type { Evaluation } from "@/services/StatisticsService";
 
@@ -46,8 +46,6 @@ export function useEvaluations() {
     androidEvaluations.value = evaluations.value.filter(evaluation => evaluation.platform === "ANDROID").length;
   };
 
-  onMounted(fetchEvaluations);
-
   return {
     evaluations,
     loading,
@@ -55,5 +53,6 @@ export function useEvaluations() {
     averageEvaluation,
     iosEvaluations,
     androidEvaluations,
+    fetchEvaluations,
   };
 }
