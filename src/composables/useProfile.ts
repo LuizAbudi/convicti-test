@@ -24,5 +24,6 @@ export function useProfiles() {
     profiles,
     loading,
     error,
+    fetchProfiles,
   };
 }

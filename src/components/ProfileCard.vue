@@ -48,7 +48,7 @@
     <EditProfileModal 
       :isOpen="isEditProfileModalOpen"
       :profile="selectedProfile!" 
-      @close="isEditProfileModalOpen = false"
+      @close="handleCloseEditModal"
       @add="handleAddProfile" 
     />
   </div>
@@ -62,6 +62,7 @@ import { MdAddBox } from 'vue-icons-plus/md';
 import CreateProfileModal from './CreateProfileModal.vue';
 import type { Profile } from '@/services/ProfileService';
 import EditProfileModal from './EditProfileModal.vue';
+import { useProfiles } from '@/composables/useProfile';
 
 defineProps<{ 
   profiles: Profile[]; 
@@ -87,7 +88,13 @@ const handleAddProfile = (profile: { name: string; options: { label: string; val
 
 const handleEditProfile = (profile: Profile) => {
   selectedProfile.value = profile;
-  console.log('Editando perfil', profile);
   openEditProfileModal();
+};
+
+const { fetchProfiles } = useProfiles();
+
+const handleCloseEditModal = () => {
+  isEditProfileModalOpen.value = false;
+  fetchProfiles();
 };
 </script>

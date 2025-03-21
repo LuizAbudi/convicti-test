@@ -20,6 +20,10 @@ export interface Profile {
   permissions: Permission[];
 }
 
+interface CreateProfileBody {
+  name: string;
+  permissions: number[];
+}
 interface ApiResponse<T> {
   data: T[];
 }
@@ -29,6 +33,16 @@ class ProfileService {
 
   async getProfiles(): Promise<ApiResponse<Profile>> {
     const response = await this.httpService.get<ApiResponse<Profile>>("/api/v1/profiles");
+    return response;
+  }
+
+  async createProfile(body: CreateProfileBody): Promise<Profile> {
+    const response = await this.httpService.post<Profile>("/api/v1/profiles", body);
+    return response;
+  }
+
+  async updateProfile(id: number, body: CreateProfileBody): Promise<Profile> {
+    const response = await this.httpService.put<Profile>(`/api/v1/profiles/${id}`, body);
     return response;
   }
 }
